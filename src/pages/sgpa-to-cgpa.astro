@@ -1,0 +1,521 @@
+
+---
+import Layout from "../Layout.astro";
+---
+
+<Layout
+  title="MAKAUT SGPA to CGPA Calculator"
+  description="Calculate your MAKAUT CGPA from semester SGPAs. Choose B.Tech or another course, enter your semester results, and calculate your CGPA."
+>
+  <main class="min-h-screen bg-[#071426] lg:px-4 lg:py-2 text-white px-6 py-14">
+    <div class="mx-auto max-w-4xl">
+      <nav class="mb-6 text-sm text-slate-400" aria-label="Breadcrumb">
+        <a href="/" class="transition hover:text-emerald-400">Home</a>
+        <span class="mx-2">/</span>
+        <span class="text-slate-200">SGPA to CGPA Calculator</span>
+      </nav>
+
+      <header class="mb-8">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-emerald-400">
+          Academic Tools
+        </p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
+          MAKAUT SGPA to CGPA Calculator
+        </h1>
+        <p class="mt-4 max-w-2xl leading-7 text-slate-300">
+          Enter your semester SGPAs to calculate your overall CGPA. Choose your
+          course first so you can enter the appropriate number of semesters.
+        </p>
+      </header>
+
+      <section class="rounded-2xl border border-white/10 bg-[#0d1e33] p-5 shadow-xl sm:p-7">
+        <h2 class="text-lg font-semibold">Select your course</h2>
+        <p class="mt-1 text-sm text-slate-400">Choose one option to continue.</p>
+
+        <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2" role="group" aria-label="Course type">
+          <button
+            type="button"
+            data-course="btech"
+            aria-pressed="true"
+            class="course-card rounded-xl border border-emerald-400 bg-emerald-400/10 p-4 text-left transition hover:bg-emerald-400/15"
+          >
+            <span class="flex items-center justify-between gap-3">
+              <span class="text-base font-semibold">B.Tech</span>
+              <span class="course-check text-emerald-400" aria-hidden="true">✓</span>
+            </span>
+            <span class="mt-1 block text-sm text-slate-400">
+              Regular entry or lateral entry
+            </span>
+          </button>
+
+          <button
+            type="button"
+            data-course="other"
+            aria-pressed="false"
+            class="course-card rounded-xl border border-white/10 bg-white/[0.02] p-4 text-left transition hover:border-emerald-400/60 hover:bg-white/[0.04]"
+          >
+            <span class="flex items-center justify-between gap-3">
+              <span class="text-base font-semibold">Other Courses</span>
+              <span class="course-check hidden text-emerald-400" aria-hidden="true">✓</span>
+            </span>
+            <span class="mt-1 block text-sm text-slate-400">
+              Select your course duration
+            </span>
+          </button>
+        </div>
+
+        <div id="btech-options" class="mt-5">
+          <label for="entry-type" class="mb-2 block text-sm font-medium text-slate-200">
+            Admission type
+          </label>
+          <select
+            id="entry-type"
+            class="w-full rounded-lg border border-white/15 bg-[#071426] px-3 py-3 text-white outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20"
+          >
+            <option value="8">Regular entry — 8 semesters</option>
+            <option value="6">Lateral entry — 6 semesters</option>
+          </select>
+        </div>
+
+        <div id="other-options" class="mt-5 hidden">
+          <label for="course-duration" class="mb-2 block text-sm font-medium text-slate-200">
+            Course duration
+          </label>
+          <select
+            id="course-duration"
+            class="w-full rounded-lg border border-white/15 bg-[#071426] px-3 py-3 text-white outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20"
+          >
+            <option value="2">1 year — 2 semesters</option>
+            <option value="4">2 years — 4 semesters</option>
+            <option value="6">3 years — 6 semesters</option>
+            <option value="8">4 years — 8 semesters</option>
+            <option value="10">5 years — 10 semesters</option>
+            <option value="12">6 years — 12 semesters</option>
+          </select>
+          <p class="mt-2 text-xs leading-5 text-slate-400">
+            Choose the duration that matches your programme.
+          </p>
+        </div>
+
+        <div class="my-7 border-t border-white/10"></div>
+
+        <div class="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
+          <div>
+            <h2 class="text-lg font-semibold">Enter your semester SGPAs</h2>
+            <p id="semester-help" class="mt-1 text-sm text-slate-400">
+              Enter the SGPAs available on your grade cards.
+            </p>
+          </div>
+          <span
+            id="semester-count"
+            class="w-fit rounded-full border border-white/10 px-3 py-1 text-xs text-slate-300"
+          >
+            2 semesters added
+          </span>
+        </div>
+
+        <div id="sgpa-inputs" class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div class="semester-field">
+            <label for="sem1" class="mb-2 block text-sm font-medium text-slate-200">
+              Semester 1 SGPA
+            </label>
+            <input
+              id="sem1"
+              name="sgpa"
+              type="number"
+              min="0"
+              max="10"
+              step="0.01"
+              inputmode="decimal"
+              placeholder="e.g. 8.50"
+              class="sgpa-input w-full rounded-lg border border-white/15 bg-[#071426] px-3 py-3 text-white placeholder:text-slate-500 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20"
+            />
+          </div>
+
+          <div class="semester-field">
+            <label for="sem2" class="mb-2 block text-sm font-medium text-slate-200">
+              Semester 2 SGPA
+            </label>
+            <input
+              id="sem2"
+              name="sgpa"
+              type="number"
+              min="0"
+              max="10"
+              step="0.01"
+              inputmode="decimal"
+              placeholder="e.g. 9.10"
+              class="sgpa-input w-full rounded-lg border border-white/15 bg-[#071426] px-3 py-3 text-white placeholder:text-slate-500 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20"
+            />
+          </div>
+        </div>
+
+        <div class="mt-5 flex flex-wrap gap-3">
+          <button
+            id="add-semester"
+            type="button"
+            class="rounded-lg border border-white/15 px-4 py-2.5 text-sm font-medium text-slate-200 transition hover:border-emerald-400 hover:text-emerald-400"
+          >
+            + Add semester
+          </button>
+          <button
+            id="remove-semester"
+            type="button"
+            class="rounded-lg border border-white/15 px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:border-red-400 hover:text-red-300"
+          >
+            Remove last
+          </button>
+        </div>
+
+        <div
+          id="error-message"
+          class="mt-5 hidden rounded-lg border border-red-400/30 bg-red-400/10 p-3 text-sm leading-6 text-red-200"
+          role="alert"
+          aria-live="polite"
+        ></div>
+
+        <div class="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <button
+            id="calculate"
+            type="button"
+            class="rounded-lg bg-emerald-400 px-5 py-3 font-semibold text-[#071426] transition hover:bg-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:ring-offset-2 focus:ring-offset-[#0d1e33]"
+          >
+            Calculate CGPA
+          </button>
+          <button
+            id="reset"
+            type="button"
+            class="rounded-lg border border-white/15 px-5 py-3 font-semibold text-white transition hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-white/30"
+          >
+            Reset
+          </button>
+        </div>
+
+        <section
+          id="result"
+          class="mt-6 hidden rounded-xl border border-emerald-400/30 bg-emerald-400/[0.07] p-5 sm:p-6"
+          aria-live="polite"
+          aria-label="CGPA result"
+        >
+          <p class="text-sm font-medium text-emerald-300">Your calculated CGPA</p>
+          <p id="cgpa-value" class="mt-2 text-5xl font-bold tracking-tight text-white">0.00</p>
+          <p id="result-summary" class="mt-3 text-sm leading-6 text-slate-300"></p>
+
+          <div class="mt-5 rounded-lg border border-white/10 bg-[#071426]/60 p-4">
+            <p class="text-sm font-semibold text-slate-200">Calculation</p>
+            <p id="calculation-breakdown" class="mt-2 break-words text-sm leading-6 text-slate-300"></p>
+          </div>
+
+          <button
+            id="copy-result"
+            type="button"
+            class="mt-4 rounded-lg border border-emerald-400/40 px-4 py-2.5 text-sm font-medium text-emerald-300 transition hover:bg-emerald-400/10"
+          >
+            Copy result
+          </button>
+          <p id="copy-status" class="mt-2 text-sm text-emerald-300" aria-live="polite"></p>
+        </section>
+      </section>
+
+      <section class="mt-10">
+        <h2 class="text-xl font-bold">How to calculate your CGPA</h2>
+        <ol class="mt-4 space-y-3 text-sm leading-6 text-slate-300">
+          <li>1. Select B.Tech or Other Courses.</li>
+          <li>2. Choose the relevant admission type or course duration.</li>
+          <li>3. Enter the SGPA shown on each semester grade card.</li>
+          <li>4. Select <strong class="text-white">Calculate CGPA</strong> to see your result.</li>
+        </ol>
+      </section>
+
+      <section class="mt-8 rounded-xl border border-white/10 bg-[#0d1e33] p-5 sm:p-6">
+        <h2 class="text-lg font-bold">Formula used</h2>
+        <p class="mt-3 text-slate-300">CGPA = Sum of entered semester SGPAs ÷ Number of entered semesters</p>
+        <p class="mt-3 text-sm leading-6 text-slate-400">
+          Only semesters with an entered SGPA are included. This calculator uses the
+          simple-average method you requested; check your applicable MAKAUT programme
+          rules if you need an officially certified result.
+        </p>
+      </section>
+
+      <section class="mt-10">
+        <h2 class="text-xl font-bold">Frequently asked questions</h2>
+        <div class="mt-4 space-y-3">
+          <details class="group rounded-xl border border-white/10 bg-[#0d1e33] p-4">
+            <summary class="cursor-pointer font-medium text-slate-100">
+              What is SGPA?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-slate-300">
+              SGPA stands for Semester Grade Point Average. It represents your academic
+              performance for an individual semester.
+            </p>
+          </details>
+
+          <details class="group rounded-xl border border-white/10 bg-[#0d1e33] p-4">
+            <summary class="cursor-pointer font-medium text-slate-100">
+              What is CGPA?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-slate-300">
+              CGPA stands for Cumulative Grade Point Average. It represents your
+              academic performance across multiple semesters.
+            </p>
+          </details>
+
+          <details class="group rounded-xl border border-white/10 bg-[#0d1e33] p-4">
+            <summary class="cursor-pointer font-medium text-slate-100">
+              Can I calculate CGPA if I have results for only a few semesters?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-slate-300">
+              Yes. Enter the SGPAs you have available. The result will use only those
+              entries, so it may not represent your final CGPA.
+            </p>
+          </details>
+
+          <details class="group rounded-xl border border-white/10 bg-[#0d1e33] p-4">
+            <summary class="cursor-pointer font-medium text-slate-100">
+              Can I use this calculator for courses other than B.Tech?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-slate-300">
+              Yes. Select Other Courses and choose the duration that matches your
+              programme.
+            </p>
+          </details>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const courseButtons = document.querySelectorAll<HTMLButtonElement>("[data-course]");
+    const btechOptions = document.getElementById("btech-options") as HTMLDivElement;
+    const otherOptions = document.getElementById("other-options") as HTMLDivElement;
+    const entryType = document.getElementById("entry-type") as HTMLSelectElement;
+    const courseDuration = document.getElementById("course-duration") as HTMLSelectElement;
+    const inputsContainer = document.getElementById("sgpa-inputs") as HTMLDivElement;
+    const addButton = document.getElementById("add-semester") as HTMLButtonElement;
+    const removeButton = document.getElementById("remove-semester") as HTMLButtonElement;
+    const calculateButton = document.getElementById("calculate") as HTMLButtonElement;
+    const resetButton = document.getElementById("reset") as HTMLButtonElement;
+    const errorMessage = document.getElementById("error-message") as HTMLDivElement;
+    const result = document.getElementById("result") as HTMLElement;
+    const cgpaValue = document.getElementById("cgpa-value") as HTMLParagraphElement;
+    const resultSummary = document.getElementById("result-summary") as HTMLParagraphElement;
+    const breakdown = document.getElementById("calculation-breakdown") as HTMLParagraphElement;
+    const copyButton = document.getElementById("copy-result") as HTMLButtonElement;
+    const copyStatus = document.getElementById("copy-status") as HTMLParagraphElement;
+    const semesterCountLabel = document.getElementById("semester-count") as HTMLSpanElement;
+
+    let selectedCourse = "btech";
+    let lastResult = "";
+
+    function getMaximumSemesters(): number {
+      return Number(selectedCourse === "btech" ? entryType.value : courseDuration.value);
+    }
+
+    function clearMessages() {
+      errorMessage.textContent = "";
+      errorMessage.classList.add("hidden");
+      copyStatus.textContent = "";
+    }
+
+    function hideResult() {
+      result.classList.add("hidden");
+      lastResult = "";
+      copyStatus.textContent = "";
+    }
+
+    function updateControls() {
+      const count = inputsContainer.querySelectorAll<HTMLInputElement>('input[name="sgpa"]').length;
+      const maximum = getMaximumSemesters();
+
+      semesterCountLabel.textContent = `${count} of ${maximum} semesters`;
+      addButton.disabled = count >= maximum;
+      removeButton.disabled = count <= 1;
+
+      addButton.classList.toggle("cursor-not-allowed", count >= maximum);
+      addButton.classList.toggle("opacity-40", count >= maximum);
+      removeButton.classList.toggle("cursor-not-allowed", count <= 1);
+      removeButton.classList.toggle("opacity-40", count <= 1);
+
+      addButton.title = count >= maximum ? "All semesters have been added" : "Add another semester";
+      removeButton.title = count <= 1 ? "At least one semester is required" : "Remove the last semester";
+    }
+
+    function createSemesterField(number: number, value = ""): HTMLDivElement {
+      const field = document.createElement("div");
+      field.className = "semester-field";
+
+      const label = document.createElement("label");
+      label.htmlFor = `sem${number}`;
+      label.className = "mb-2 block text-sm font-medium text-slate-200";
+      label.textContent = `Semester ${number} SGPA`;
+
+      const input = document.createElement("input");
+      input.id = `sem${number}`;
+      input.name = "sgpa";
+      input.type = "number";
+      input.min = "0";
+      input.max = "10";
+      input.step = "0.01";
+      input.inputMode = "decimal";
+      input.placeholder = "e.g. 8.50";
+      input.value = value;
+      input.className =
+        "sgpa-input w-full rounded-lg border border-white/15 bg-[#071426] px-3 py-3 text-white placeholder:text-slate-500 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20";
+
+      input.addEventListener("input", () => {
+        input.classList.remove("border-red-400");
+        clearMessages();
+        hideResult();
+      });
+
+      field.append(label, input);
+      return field;
+    }
+
+    function rebuildInputs(count: number, preserveValues = true) {
+      const oldValues = preserveValues
+        ? Array.from(inputsContainer.querySelectorAll<HTMLInputElement>('input[name="sgpa"]'))
+            .map((input) => input.value)
+        : [];
+
+      inputsContainer.replaceChildren();
+
+      for (let i = 1; i <= count; i++) {
+        inputsContainer.append(createSemesterField(i, oldValues[i - 1] ?? ""));
+      }
+
+      clearMessages();
+      hideResult();
+      updateControls();
+    }
+
+    function resetCalculator() {
+      rebuildInputs(2, false);
+      updateControls();
+    }
+
+    courseButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        selectedCourse = button.dataset.course ?? "btech";
+
+        courseButtons.forEach((card) => {
+          const active = card === button;
+          card.setAttribute("aria-pressed", String(active));
+          card.classList.toggle("border-emerald-400", active);
+          card.classList.toggle("bg-emerald-400/10", active);
+          card.classList.toggle("border-white/10", !active);
+          card.classList.toggle("bg-white/[0.02]", !active);
+
+          const check = card.querySelector(".course-check");
+          check?.classList.toggle("hidden", !active);
+        });
+
+        btechOptions.classList.toggle("hidden", selectedCourse !== "btech");
+        otherOptions.classList.toggle("hidden", selectedCourse !== "other");
+
+        resetCalculator();
+      });
+    });
+
+    entryType.addEventListener("change", () => {
+      rebuildInputs(Math.min(2, getMaximumSemesters()), false);
+    });
+
+    courseDuration.addEventListener("change", () => {
+      rebuildInputs(Math.min(2, getMaximumSemesters()), false);
+    });
+
+    addButton.addEventListener("click", () => {
+      const currentCount = inputsContainer.querySelectorAll('input[name="sgpa"]').length;
+      if (currentCount >= getMaximumSemesters()) return;
+
+      inputsContainer.append(createSemesterField(currentCount + 1));
+      clearMessages();
+      hideResult();
+      updateControls();
+    });
+
+    removeButton.addEventListener("click", () => {
+      const fields = inputsContainer.querySelectorAll(".semester-field");
+      if (fields.length <= 1) return;
+
+      fields[fields.length - 1].remove();
+      clearMessages();
+      hideResult();
+      updateControls();
+    });
+
+    calculateButton.addEventListener("click", () => {
+      clearMessages();
+
+      const fields = Array.from(
+        inputsContainer.querySelectorAll<HTMLInputElement>('input[name="sgpa"]'),
+      );
+
+      fields.forEach((field) => field.classList.remove("border-red-400"));
+
+      const enteredValues: number[] = [];
+      let hasInvalidValue = false;
+
+      fields.forEach((field) => {
+        const rawValue = field.value.trim();
+
+        if (!rawValue) return;
+
+        const value = Number(rawValue);
+        if (!Number.isFinite(value) || value < 0 || value > 10) {
+          field.classList.add("border-red-400");
+          hasInvalidValue = true;
+        } else {
+          enteredValues.push(value);
+        }
+      });
+
+      if (hasInvalidValue) {
+        errorMessage.textContent =
+          "Check the highlighted fields. Each SGPA must be a number between 0 and 10.";
+        errorMessage.classList.remove("hidden");
+        hideResult();
+        return;
+      }
+
+      if (enteredValues.length === 0) {
+        errorMessage.textContent = "Enter at least one semester SGPA to calculate your CGPA.";
+        errorMessage.classList.remove("hidden");
+        hideResult();
+        return;
+      }
+
+      const total = enteredValues.reduce((sum, value) => sum + value, 0);
+      const cgpa = total / enteredValues.length;
+      const formattedValues = enteredValues.map((value) => value.toFixed(2));
+
+      cgpaValue.textContent = cgpa.toFixed(2);
+      resultSummary.textContent =
+        `Calculated using ${enteredValues.length} ${enteredValues.length === 1 ? "semester" : "semesters"}.`;
+      breakdown.textContent =
+        `(${formattedValues.join(" + ")}) ÷ ${enteredValues.length} = ${cgpa.toFixed(2)}`;
+
+      lastResult =
+        `MAKAUT SGPA to CGPA Calculator\nCGPA: ${cgpa.toFixed(2)}\nSemesters included: ${enteredValues.length}\nCalculation: (${formattedValues.join(" + ")}) ÷ ${enteredValues.length} = ${cgpa.toFixed(2)}`;
+
+      result.classList.remove("hidden");
+      result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    resetButton.addEventListener("click", resetCalculator);
+
+    copyButton.addEventListener("click", async () => {
+      if (!lastResult) return;
+
+      try {
+        await navigator.clipboard.writeText(lastResult);
+        copyStatus.textContent = "Result copied.";
+      } catch {
+        copyStatus.textContent = "Copying is not available in this browser. You can select and copy the result manually.";
+      }
+    });
+
+    rebuildInputs(2, false);
+  </script>
+</Layout>

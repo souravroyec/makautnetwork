@@ -1,0 +1,30 @@
+
+---
+import { Image } from 'astro:assets';
+---
+<section class="bg-[#071426] shadow-md lg:py-8 py-2">
+   <div class="mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center lg:gap-0 gap-4 lg:px-2 px-2">
+ 
+  <!-- Left Content -->
+  <div class="w-full lg:w-1/2 space-y-2 lg:space-y-0">
+    <h1 class="lg:text-[3.5rem] leading-11 lg:leading-16 text-slate-300 text-[2.2rem] font-bold lg:tracking-tight text-opacity-80">
+      The One-Stop Platform that Stands By <span class="text-emerald-400">Makaut Students!</span>
+    </h1>
+    <p class="lg:text-lg text-md leading-relaxed text-slate-400 lg:text-left text-justify">
+      A platform for MAKAUT students that provides MAR points, study materials, semester updates, PYQs, calculators, and more.
+    </p>
+  </div>
+
+  <!-- Right Image from public/ using Astro Image component -->
+  <div class="w-full lg:w-1/2 flex justify-end">
+    <Image 
+      src="/h-img.png" 
+      alt="Makaut Network Hero" 
+      width={500} 
+      height={500}
+      class="w-full max-w-lg h-auto select-none [-webkit-user-drag:none] opacity-100 [mask-image:radial-gradient(ellipse_at_center,black_1%,transparent_100%)] [-webkit-mask-image:radial-gradient(ellipse_at_center,black_1%,transparent_100%)]"
+    />
+  </div>
+      </div>  
+</section>
+

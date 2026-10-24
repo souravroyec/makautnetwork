@@ -1,0 +1,168 @@
+---
+import { Image } from 'astro:assets';
+
+const socials = [
+  {
+    name: "X",
+    url: "https://x.com/makautnet",
+    icon: "x",
+  },
+  {
+    name: "Instagram",
+    url: "https://www.instagram.com/makautnet/",
+    icon: "instagram",
+  },
+  {
+    name: "YouTube",
+    url: "https://www.youtube.com/@makautnet",
+    icon: "youtube",
+  },
+];
+---
+
+<footer class="border-t border-white/10 bg-[#071426] text-slate-300">
+  <div class="mx-auto max-w-7xl lg:px-6 px-2 lg:px-10">
+
+    <!-- Main footer -->
+    <div class="grid grid-cols-1 gap-8 py-8 sm:grid-cols-2 lg:grid-cols-12 lg:gap-10">
+
+      <!-- About -->
+      <div class="lg:col-span-6">
+        <h2 class="mt-2 text-base font-semibold text-white">
+          About Makaut Network
+        </h2>
+
+        <p class="mt-2 max-w-md text-sm leading-5 text-slate-400 text-justify">
+          I created Makaut Network to make student life easier. Finding reliable grade converter, Mar Points, exam updates, study resources, and career guidance shouldn’t be complicated. Here, you’ll get clear information and practical tips for your studies and future. If you have suggestions or feedback, feel free to reach out — it’s always appreciated!
+        </p>
+      </div>
+
+      <!-- Contact -->
+      <div class="lg:col-span-3">
+        <h2 class="text-base font-semibold text-white">
+          Contact Us
+        </h2>
+
+        <ul class="mt-4 space-y-3 text-sm">
+          <li class="flex items-start gap-3">
+            <svg
+              class="mt-0.5 h-4 w-4 shrink-0 text-emerald-400"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              aria-hidden="true"
+            >
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="m3 7 9 6 9-6" />
+            </svg>
+            <a
+              href="mailto:contact@makaut.net"
+              class="break-all transition-colors hover:text-emerald-400"
+            >
+              contact@makaut.net
+            </a>
+          </li>
+
+          <li class="flex items-start gap-3">
+            <svg
+              class="mt-0.5 h-4 w-4 shrink-0 text-emerald-400"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              aria-hidden="true"
+            >
+              <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+              <circle cx="12" cy="10" r="2.5" />
+            </svg>
+            <span>Purulia, West Bengal, India</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Social links -->
+      <div class="lg:col-span-3">
+        <h2 class="text-base font-semibold text-white">
+          Follow Us
+        </h2>
+
+        <div class="mt-4 flex items-center gap-3">
+          {socials.map((social) => (
+            <a
+              href={social.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={social.name}
+              title={social.name}
+              class="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-slate-400 transition-colors hover:border-emerald-400/30 hover:bg-emerald-400/10 hover:text-emerald-400"
+            >
+              {social.icon === "x" && (
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="h-[17px] w-[17px]"
+                  aria-hidden="true"
+                >
+                  <path d="M18.9 2H22l-6.78 7.75L23.2 22h-6.25l-4.9-7.45L5.52 22H2.4l7.25-8.29L1.9 2h6.4l4.43 6.97L18.9 2Zm-1.1 18h1.73L7.37 3.89H5.51L17.8 20Z" />
+                </svg>
+              )}
+
+              {social.icon === "instagram" && (
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  class="h-[18px] w-[18px]"
+                  aria-hidden="true"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+                </svg>
+              )}
+
+              {social.icon === "youtube" && (
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="h-[19px] w-[19px]"
+                  aria-hidden="true"
+                >
+                  <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z" />
+                </svg>
+              )}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="flex flex-col gap-3 border-t border-white/10 py-5 text-xs text-slate-500 sm:flex-row items-center justify-between">
+      <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
+        <a
+          href="/"
+          class="font-semibold text-slate-300 transition-colors hover:text-emerald-400"
+        >
+         <Image src="/logo.svg" alt="Makaut Network Logo" width={20} height={20} class="opacity-80 hover:opacity-100 w-8 max-w-lg h-auto select-none [-webkit-user-drag:none]"draggable="false" oncontextmenu="return false;"/>
+  </a>
+        
+        <a href="/about" class="transition-colors hover:text-emerald-400">
+          About Us
+        </a>
+        <a href="/privacy-policy" class="transition-colors hover:text-emerald-400">
+          Privacy
+        </a>
+        <a href="/terms" class="transition-colors hover:text-emerald-400">
+          Terms
+        </a>
+      </div>
+
+      <p>
+        © {new Date().getFullYear()} Makaut Network. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>

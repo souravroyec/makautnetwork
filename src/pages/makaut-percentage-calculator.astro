@@ -1,0 +1,359 @@
+
+---
+import Layout from "../Layout.astro";
+---
+
+<Layout
+  title="MAKAUT CGPA to Percentage Calculator"
+  description="Convert your MAKAUT CGPA or final DGPA into an equivalent percentage using the university's published ten-point-scale conversion."
+>
+  <main class="min-h-screen bg-[#071426] lg:px-4 lg:py-2 text-white px-6 py-14">
+    <div class="mx-auto max-w-3xl">
+      <nav class="mb-6 text-sm text-slate-400" aria-label="Breadcrumb">
+        <a href="/" class="transition hover:text-emerald-400">Home</a>
+        <span class="mx-2">/</span>
+        <span class="text-slate-200">CGPA to Percentage</span>
+      </nav>
+
+      <header class="mb-8">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-emerald-400">
+          Academic Tools
+        </p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
+          MAKAUT CGPA to Percentage Calculator
+        </h1>
+        <p class="mt-4 leading-7 text-slate-300">
+          Enter your CGPA to calculate its percentage equivalent. You can use the
+          same calculator for your final DGPA.
+        </p>
+      </header>
+
+      <section class="rounded-2xl border border-white/10 bg-[#0d1e33] p-5 shadow-xl sm:p-7">
+        <h2 class="text-lg font-semibold">Select your course</h2>
+        <p class="mt-1 text-sm text-slate-400">
+          Choose the course you are studying.
+        </p>
+
+        <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2" role="group" aria-label="Course type">
+          <button
+            type="button"
+            data-course="btech"
+            aria-pressed="true"
+            class="course-card rounded-xl border border-emerald-400 bg-emerald-400/10 p-4 text-left transition hover:bg-emerald-400/15"
+          >
+            <span class="flex items-center justify-between gap-3">
+              <span class="font-semibold">B.Tech</span>
+              <span class="course-check text-emerald-400" aria-hidden="true">✓</span>
+            </span>
+            <span class="mt-1 block text-sm text-slate-400">Engineering degree</span>
+          </button>
+
+          <button
+            type="button"
+            data-course="other"
+            aria-pressed="false"
+            class="course-card rounded-xl border border-white/10 bg-white/[0.02] p-4 text-left transition hover:border-emerald-400/60"
+          >
+            <span class="flex items-center justify-between gap-3">
+              <span class="font-semibold">Other Courses</span>
+              <span class="course-check hidden text-emerald-400" aria-hidden="true">✓</span>
+            </span>
+            <span class="mt-1 block text-sm text-slate-400">Other UG and PG programmes</span>
+          </button>
+        </div>
+
+        <div class="my-7 border-t border-white/10"></div>
+
+        <label for="grade-type" class="mb-2 block text-sm font-medium text-slate-200">
+          Grade point type
+        </label>
+        <select
+          id="grade-type"
+          class="w-full rounded-lg border border-white/15 bg-[#071426] px-3 py-3 text-white outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20"
+        >
+          <option value="CGPA">CGPA</option>
+          <option value="DGPA">Final DGPA</option>
+        </select>
+
+        <label for="grade-point" class="mb-2 mt-5 block text-sm font-medium text-slate-200">
+          Enter your <span id="grade-label">CGPA</span>
+        </label>
+        <div class="relative">
+          <input
+            id="grade-point"
+            type="number"
+            min="0"
+            max="10"
+            step="0.01"
+            inputmode="decimal"
+            placeholder="e.g. 8.25"
+            aria-describedby="grade-help"
+            class="w-full rounded-lg border border-white/15 bg-[#071426] px-4 py-4 pr-16 text-lg text-white placeholder:text-slate-500 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20"
+          />
+          <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-slate-400">/ 10</span>
+        </div>
+        <p id="grade-help" class="mt-2 text-sm text-slate-400">
+          Enter the value shown on your grade card, from 0 to 10.
+        </p>
+
+        <div
+          id="error-message"
+          class="mt-4 hidden rounded-lg border border-red-400/30 bg-red-400/10 p-3 text-sm leading-6 text-red-200"
+          role="alert"
+          aria-live="polite"
+        ></div>
+
+        <div class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <button
+            id="calculate"
+            type="button"
+            class="rounded-lg bg-emerald-400 px-5 py-3 font-semibold text-[#071426] transition hover:bg-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:ring-offset-2 focus:ring-offset-[#0d1e33]"
+          >
+            Calculate Percentage
+          </button>
+          <button
+            id="reset"
+            type="button"
+            class="rounded-lg border border-white/15 px-5 py-3 font-semibold text-white transition hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-white/30"
+          >
+            Reset
+          </button>
+        </div>
+
+        <section
+          id="result"
+          class="mt-6 hidden rounded-xl border border-emerald-400/30 bg-emerald-400/[0.07] p-5 sm:p-6"
+          aria-live="polite"
+          aria-label="Percentage result"
+        >
+          <p class="text-sm font-medium text-emerald-300">Percentage equivalent</p>
+          <p id="percentage-value" class="mt-2 text-5xl font-bold tracking-tight text-white">
+            0.00%
+          </p>
+          <p id="result-summary" class="mt-3 text-sm leading-6 text-slate-300"></p>
+
+          <div class="mt-5 rounded-lg border border-white/10 bg-[#071426]/60 p-4">
+            <p class="text-sm font-semibold text-slate-200">Calculation</p>
+            <p id="calculation-breakdown" class="mt-2 break-words text-sm leading-6 text-slate-300"></p>
+          </div>
+
+          <button
+            id="copy-result"
+            type="button"
+            class="mt-4 rounded-lg border border-emerald-400/40 px-4 py-2.5 text-sm font-medium text-emerald-300 transition hover:bg-emerald-400/10"
+          >
+            Copy result
+          </button>
+          <p id="copy-status" class="mt-2 text-sm text-emerald-300" aria-live="polite"></p>
+        </section>
+      </section>
+
+      <section class="mt-10 rounded-xl border border-white/10 bg-[#0d1e33] p-5 sm:p-6">
+        <h2 class="text-xl font-bold">MAKAUT percentage conversion</h2>
+        <p class="mt-3 leading-7 text-slate-300">
+          The published ten-point-scale conversion table gives these equivalent values:
+        </p>
+
+        <div class="mt-4 overflow-x-auto">
+          <table class="w-full border-collapse text-left text-sm">
+            <thead>
+              <tr class="border-b border-white/10 text-slate-400">
+                <th class="px-3 py-3 font-medium">Grade point</th>
+                <th class="px-3 py-3 font-medium">Percentage</th>
+              </tr>
+            </thead>
+            <tbody class="text-slate-200">
+              <tr class="border-b border-white/5"><td class="px-3 py-3">6.25</td><td class="px-3 py-3">55%</td></tr>
+              <tr class="border-b border-white/5"><td class="px-3 py-3">6.75</td><td class="px-3 py-3">60%</td></tr>
+              <tr class="border-b border-white/5"><td class="px-3 py-3">7.25</td><td class="px-3 py-3">65%</td></tr>
+              <tr class="border-b border-white/5"><td class="px-3 py-3">7.75</td><td class="px-3 py-3">70%</td></tr>
+              <tr><td class="px-3 py-3">8.25</td><td class="px-3 py-3">75%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="mt-4 text-sm leading-6 text-slate-400">
+          The calculation uses the equivalent formula (grade point − 0.75) × 10,
+          which matches the published reference values. Check your applicable
+          programme rules before using a conversion for an official application.
+        </p>
+      </section>
+
+      <section class="mt-10">
+        <h2 class="text-xl font-bold">Frequently asked questions</h2>
+        <div class="mt-4 space-y-3">
+          <details class="rounded-xl border border-white/10 bg-[#0d1e33] p-4">
+            <summary class="cursor-pointer font-medium text-slate-100">
+              How do I convert CGPA to percentage?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-slate-300">
+              Subtract 0.75 from your CGPA and multiply the result by 10.
+              For example, 8.25 gives (8.25 − 0.75) × 10 = 75%.
+            </p>
+          </details>
+
+          <details class="rounded-xl border border-white/10 bg-[#0d1e33] p-4">
+            <summary class="cursor-pointer font-medium text-slate-100">
+              Can I convert my final DGPA?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-slate-300">
+              Yes. Select Final DGPA and enter the grade point shown on your final
+              grade card.
+            </p>
+          </details>
+
+          <details class="rounded-xl border border-white/10 bg-[#0d1e33] p-4">
+            <summary class="cursor-pointer font-medium text-slate-100">
+              Is CGPA multiplied directly by 10?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-slate-300">
+              No. This conversion subtracts 0.75 before multiplying by 10.
+              For example, 8.00 converts to 72.50%, not 80%.
+            </p>
+          </details>
+
+          <details class="rounded-xl border border-white/10 bg-[#0d1e33] p-4">
+            <summary class="cursor-pointer font-medium text-slate-100">
+              Can I use this result for job applications?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-slate-300">
+              Check the application instructions before submitting a converted
+              percentage. Some employers and institutions may require a conversion
+              certificate or specific documentation.
+            </p>
+          </details>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const courseButtons = document.querySelectorAll<HTMLButtonElement>("[data-course]");
+    const gradeType = document.getElementById("grade-type") as HTMLSelectElement;
+    const gradeInput = document.getElementById("grade-point") as HTMLInputElement;
+    const gradeLabel = document.getElementById("grade-label") as HTMLSpanElement;
+    const errorMessage = document.getElementById("error-message") as HTMLDivElement;
+    const result = document.getElementById("result") as HTMLElement;
+    const percentageValue = document.getElementById("percentage-value") as HTMLParagraphElement;
+    const resultSummary = document.getElementById("result-summary") as HTMLParagraphElement;
+    const breakdown = document.getElementById("calculation-breakdown") as HTMLParagraphElement;
+    const calculateButton = document.getElementById("calculate") as HTMLButtonElement;
+    const resetButton = document.getElementById("reset") as HTMLButtonElement;
+    const copyButton = document.getElementById("copy-result") as HTMLButtonElement;
+    const copyStatus = document.getElementById("copy-status") as HTMLParagraphElement;
+
+    let selectedCourse = "btech";
+    let lastResult = "";
+
+    function clearMessages() {
+      errorMessage.textContent = "";
+      errorMessage.classList.add("hidden");
+      copyStatus.textContent = "";
+    }
+
+    function hideResult() {
+      result.classList.add("hidden");
+      lastResult = "";
+      copyStatus.textContent = "";
+    }
+
+    function updateGradeLabel() {
+      gradeLabel.textContent = gradeType.value;
+      gradeInput.setAttribute("aria-label", `${gradeType.value}, out of 10`);
+      gradeInput.placeholder = gradeType.value === "DGPA" ? "e.g. 8.25" : "e.g. 8.25";
+    }
+
+    courseButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        selectedCourse = button.dataset.course ?? "btech";
+
+        courseButtons.forEach((card) => {
+          const active = card === button;
+          card.setAttribute("aria-pressed", String(active));
+          card.classList.toggle("border-emerald-400", active);
+          card.classList.toggle("bg-emerald-400/10", active);
+          card.classList.toggle("border-white/10", !active);
+          card.classList.toggle("bg-white/[0.02]", !active);
+          card.querySelector(".course-check")?.classList.toggle("hidden", !active);
+        });
+
+        clearMessages();
+        hideResult();
+      });
+    });
+
+    gradeType.addEventListener("change", () => {
+      updateGradeLabel();
+      clearMessages();
+      hideResult();
+    });
+
+    gradeInput.addEventListener("input", () => {
+      gradeInput.classList.remove("border-red-400");
+      clearMessages();
+      hideResult();
+    });
+
+    calculateButton.addEventListener("click", () => {
+      clearMessages();
+      gradeInput.classList.remove("border-red-400");
+
+      const rawValue = gradeInput.value.trim();
+      const gradePoint = Number(rawValue);
+
+      if (
+        rawValue === "" ||
+        !Number.isFinite(gradePoint) ||
+        gradePoint < 0 ||
+        gradePoint > 10
+      ) {
+        gradeInput.classList.add("border-red-400");
+        errorMessage.textContent = `Enter a valid ${gradeType.value} between 0 and 10.`;
+        errorMessage.classList.remove("hidden");
+        hideResult();
+        gradeInput.focus();
+        return;
+      }
+
+      const percentage = (gradePoint - 0.75) * 10;
+      const formattedGrade = gradePoint.toFixed(2);
+      const formattedPercentage = percentage.toFixed(2);
+
+      percentageValue.textContent = `${formattedPercentage}%`;
+      resultSummary.textContent =
+        `${selectedCourse === "btech" ? "B.Tech" : "Other Courses"} · ${gradeType.value}: ${formattedGrade}`;
+      breakdown.textContent =
+        `(${formattedGrade} − 0.75) × 10 = ${formattedPercentage}%`;
+
+      lastResult =
+        `MAKAUT CGPA to Percentage Calculator\nCourse: ${selectedCourse === "btech" ? "B.Tech" : "Other Courses"}\n${gradeType.value}: ${formattedGrade}\nPercentage equivalent: ${formattedPercentage}%\nCalculation: (${formattedGrade} - 0.75) x 10 = ${formattedPercentage}%`;
+
+      result.classList.remove("hidden");
+      result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    resetButton.addEventListener("click", () => {
+      gradeInput.value = "";
+      gradeType.value = "CGPA";
+      updateGradeLabel();
+      clearMessages();
+      hideResult();
+      gradeInput.classList.remove("border-red-400");
+      gradeInput.focus();
+    });
+
+    copyButton.addEventListener("click", async () => {
+      if (!lastResult) return;
+
+      try {
+        await navigator.clipboard.writeText(lastResult);
+        copyStatus.textContent = "Result copied.";
+      } catch {
+        copyStatus.textContent =
+          "Copying is unavailable in this browser. Select and copy the result manually.";
+      }
+    });
+
+    updateGradeLabel();
+  </script>
+</Layout>

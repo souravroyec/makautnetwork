@@ -1,0 +1,188 @@
+---
+import { Image } from 'astro:assets';
+
+// Single source of truth for both desktop and mobile menus
+const links = [
+  { label: 'Home', href: '/', color: 'text-slate-300' },
+  { label: 'YouTube', href: 'https://www.youtube.com/@makautnet', color: 'text-red-500', external: true },
+  // TODO: add your WhatsApp channel/group link below
+  { label: 'WhatsApp', href: 'https://whatsapp.com/channel/0029VbDGKHPJuyA2sSXjeG3M', color: 'text-green-500', external: true },
+];
+---
+
+<header
+  id="site-header"
+  class="fixed top-0 inset-x-0 z-[60] w-full bg-[#071426] py-1 px-2 lg:px-0 border-b-[0.1px] border-emerald-800/30"
+>
+  <div class="flex items-center justify-between md:mx-12">
+
+    <!-- Logo + brand (left) -->
+    <a href="/" class="flex items-center gap-2">
+      <Image
+        src="/logo.svg"
+        alt="Makaut Network Logo"
+        width={20}
+        height={20}
+        class="w-10 sm:w-14 max-w-lg h-auto select-none [-webkit-user-drag:none]"
+        draggable="false"
+        oncontextmenu="return false;"
+      />
+      <span class="text-slate-400 text-2xl sm:text-4xl font-bold">Makaut.Net</span>
+    </a>
+
+    <!-- Desktop nav (unchanged look) -->
+    <nav class="hidden md:flex space-x-4" aria-label="Main">
+      {links.map((l) => (
+        <a
+          href={l.href}
+          class={`${l.color} tracking-widest hover:bg-slate-600 bg-slate-800 py-1 px-2 rounded-md text-center`}
+          {...(l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+        >
+          {l.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Hamburger / close toggle (right, mobile only). Stays in the header and morphs to an X. -->
+    <button
+      id="menu-toggle"
+      type="button"
+      class="burger md:hidden p-2 rounded-md bg-slate-800 hover:bg-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+      aria-label="Open menu"
+      aria-controls="mobile-menu"
+      aria-expanded="false"
+    >
+      <span class="bar bar-top"></span>
+      <span class="bar bar-mid"></span>
+      <span class="bar bar-bot"></span>
+    </button>
+  </div>
+
+  <!--
+    Layer that starts exactly where the header ends. It clips the panel,
+    so the panel slides out from the header's bottom edge, right to left.
+  -->
+  <div id="menu-layer" class="menu-layer md:hidden" aria-hidden="true">
+    <div id="menu-overlay" class="menu-overlay"></div>
+
+    <aside id="mobile-menu" class="menu-panel" aria-label="Mobile menu">
+      <nav class="flex flex-col gap-3 p-4" aria-label="Mobile">
+        {links.map((l) => (
+          <a
+            href={l.href}
+            class={`${l.color} tracking-widest bg-slate-800 hover:bg-slate-600 py-3 px-4 rounded-md text-lg`}
+            {...(l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          >
+            {l.label}
+          </a>
+        ))}
+      </nav>
+    </aside>
+  </div>
+</header>
+
+<style>
+  /* ---------- Slide layer ---------- */
+  .menu-layer {
+    position: fixed;
+    top: var(--header-h, 4.25rem); /* set from JS = real header height */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;            /* clips the panel while it is off-screen */
+    visibility: hidden;
+    pointer-events: none;
+    /* hide only AFTER the slide-out finishes */
+    transition: visibility 0s linear 350ms;
+  }
+  .menu-layer[data-open="true"] {
+    visibility: visible;
+    pointer-events: auto;
+    transition-delay: 0s;
+  }
+
+  .menu-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 0.55);
+    opacity: 0;
+    transition: opacity 350ms ease;
+  }
+  .menu-layer[data-open="true"] .menu-overlay { opacity: 1; }
+
+  .menu-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 18rem;
+    max-width: 85vw;
+    background: #071426;                         /* same as header */
+    border-left: 0.1px solid rgb(6 78 59 / 0.3); /* emerald-800/30, same as header border */
+    transform: translate3d(100%, 0, 0);          /* parked just off the right edge */
+    transition: transform 350ms cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: transform;
+    overflow-y: auto;
+  }
+  .menu-layer[data-open="true"] .menu-panel { transform: translate3d(0, 0, 0); }
+
+  /* ---------- Hamburger -> X ---------- */
+  .burger { position: relative; width: 2.5rem; height: 2.5rem; }
+  .bar {
+    position: absolute;
+    left: 0.6rem;
+    right: 0.6rem;
+    height: 2px;
+    border-radius: 2px;
+    background: #cbd5e1; /* slate-300 */
+    transition: transform 300ms ease, opacity 200ms ease, top 300ms ease;
+  }
+  .bar-top { top: 0.8rem; }
+  .bar-mid { top: 1.2rem; }
+  .bar-bot { top: 1.6rem; }
+  .burger[aria-expanded="true"] .bar-top { top: 1.2rem; transform: rotate(45deg); }
+  .burger[aria-expanded="true"] .bar-mid { opacity: 0; }
+  .burger[aria-expanded="true"] .bar-bot { top: 1.2rem; transform: rotate(-45deg); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-layer, .menu-overlay, .menu-panel, .bar { transition-duration: 0.01ms !important; transition-delay: 0s !important; }
+  }
+</style>
+
+<script>
+  const header = document.getElementById('site-header');
+  const toggle = document.getElementById('menu-toggle');
+  const layer = document.getElementById('menu-layer');
+  const overlay = document.getElementById('menu-overlay');
+  const panel = document.getElementById('mobile-menu');
+
+  // Keep the layer glued to the bottom edge of the header
+  function syncHeaderHeight() {
+    if (!header) return;
+    document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+  }
+  syncHeaderHeight();
+  if (header) new ResizeObserver(syncHeaderHeight).observe(header);
+
+  let open = false;
+  function setMenu(next: boolean) {
+    if (!toggle || !layer) return;
+    open = next;
+    syncHeaderHeight();
+    layer.dataset.open = String(open);
+    layer.setAttribute('aria-hidden', String(!open));
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+
+  toggle?.addEventListener('click', () => setMenu(!open));
+  overlay?.addEventListener('click', () => setMenu(false));
+  panel?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && open) setMenu(false);
+  });
+  window.matchMedia('(min-width: 768px)').addEventListener('change', (e) => {
+    if (e.matches && open) setMenu(false);
+  });
+</script>
